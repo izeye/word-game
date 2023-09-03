@@ -60,7 +60,8 @@ public class Main {
 			System.out.println(entry.getKey());
 			String line;
 			while ((line = new Scanner(System.in).nextLine()) != null) {
-				if (line.equals(entry.getValue())) {
+				String trimmed = line.trim();
+				if (trimmed.equals(entry.getValue())) {
 					break;
 				}
 				System.out.println("Wrong. Try again!");
