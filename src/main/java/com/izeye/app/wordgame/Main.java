@@ -38,7 +38,7 @@ public class Main {
 
 		Map<String, String> koreanToEnglish = Files.readAllLines(Path.of(path))
 			.stream()
-			.map((line) -> line.split(","))
+			.map((line) -> line.split(",", 2))
 			.collect(Collectors.toMap((fields) -> fields[1], (fields) -> fields[0]));
 
 		for (Map.Entry<String, String> entry : koreanToEnglish.entrySet()) {
