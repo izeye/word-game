@@ -16,6 +16,7 @@
 
 package com.izeye.app.wordgame;
 
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -26,13 +27,18 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("사과");
-		String line;
-		while ((line = new Scanner(System.in).nextLine()) != null) {
-			if (line.equals("apple")) {
-				break;
+		Map<String, String> koreanToEnglish = Map.ofEntries(Map.entry("사과", "apple"), Map.entry("빨간", "red"));
+
+		for (Map.Entry<String, String> entry : koreanToEnglish.entrySet()) {
+			System.out.println(entry.getKey());
+			String line;
+			while ((line = new Scanner(System.in).nextLine()) != null) {
+				if (line.equals(entry.getValue())) {
+					break;
+				}
+				System.out.println("Wrong. Try again!");
 			}
-			System.out.println("Try again!");
+			System.out.println("Correct!");
 		}
 		System.out.println("Congratulation!");
 	}
