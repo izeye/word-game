@@ -19,6 +19,8 @@ package com.izeye.app.wordgame;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -41,7 +43,9 @@ public class Main {
 			.map((line) -> line.split(",", 2))
 			.collect(Collectors.toMap((fields) -> fields[1], (fields) -> fields[0]));
 
-		for (Map.Entry<String, String> entry : koreanToEnglish.entrySet()) {
+		List<Map.Entry<String, String>> entries = koreanToEnglish.entrySet().stream().collect(Collectors.toList());
+		Collections.shuffle(entries);
+		for (Map.Entry<String, String> entry : entries) {
 			System.out.println(entry.getKey());
 			String line;
 			while ((line = new Scanner(System.in).nextLine()) != null) {
