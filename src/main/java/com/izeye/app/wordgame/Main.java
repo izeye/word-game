@@ -16,8 +16,12 @@
 
 package com.izeye.app.wordgame;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * Main class.
@@ -26,8 +30,11 @@ import java.util.Scanner;
  */
 public class Main {
 
-	public static void main(String[] args) {
-		Map<String, String> koreanToEnglish = Map.ofEntries(Map.entry("사과", "apple"), Map.entry("빨간", "red"));
+	public static void main(String[] args) throws IOException {
+		Map<String, String> koreanToEnglish = Files.readAllLines(Path.of("src/main/resources/korean_to_english.csv"))
+			.stream()
+			.map((line) -> line.split(","))
+			.collect(Collectors.toMap((fields) -> fields[0], (fields) -> fields[1]));
 
 		for (Map.Entry<String, String> entry : koreanToEnglish.entrySet()) {
 			System.out.println(entry.getKey());
