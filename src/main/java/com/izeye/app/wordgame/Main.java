@@ -31,7 +31,12 @@ import java.util.stream.Collectors;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Map<String, String> koreanToEnglish = Files.readAllLines(Path.of("src/main/resources/english_to_korean.csv"))
+		String path = "src/main/resources/english_to_korean.csv";
+		if (args.length == 1) {
+			path = args[0];
+		}
+
+		Map<String, String> koreanToEnglish = Files.readAllLines(Path.of(path))
 			.stream()
 			.map((line) -> line.split(","))
 			.collect(Collectors.toMap((fields) -> fields[1], (fields) -> fields[0]));
