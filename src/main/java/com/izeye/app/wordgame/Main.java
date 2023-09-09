@@ -44,6 +44,8 @@ public class Main {
 
 	public static void main(String[] args)
 			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
+		Scanner scanner = new Scanner(System.in);
+
 		String path = "src/main/resources/words/english_to_korean.csv";
 		if (args.length == 1) {
 			path = args[0];
@@ -59,8 +61,14 @@ public class Main {
 		for (Map.Entry<String, String> entry : entries) {
 			System.out.println(entry.getKey());
 			String line;
-			while ((line = new Scanner(System.in).nextLine()) != null) {
+			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
+
+				System.out.format("Is your answer '%s'? (y/n) ", trimmed);
+				if (!scanner.nextLine().trim().equals("y")) {
+					continue;
+				}
+
 				if (trimmed.equals(entry.getValue())) {
 					break;
 				}
