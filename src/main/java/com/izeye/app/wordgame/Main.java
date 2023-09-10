@@ -58,8 +58,10 @@ public class Main {
 
 		List<Map.Entry<String, String>> entries = koreanToEnglish.entrySet().stream().collect(Collectors.toList());
 		Collections.shuffle(entries);
-		for (Map.Entry<String, String> entry : entries) {
-			System.out.println(entry.getKey());
+		int size = entries.size();
+		for (int i = 0; i < size; i++) {
+			Map.Entry<String, String> entry = entries.get(i);
+			System.out.format("%s (%d/%d)%n", entry.getKey(), i + 1, size);
 			String line;
 			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
