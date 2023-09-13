@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,7 @@ public class Main {
 		List<Map.Entry<String, String>> entries = koreanToEnglish.entrySet().stream().collect(Collectors.toList());
 		Collections.shuffle(entries);
 		int size = entries.size();
+		List<Map.Entry<String, String>> wrongAnswers = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
 			Map.Entry<String, String> entry = entries.get(i);
 			System.out.format("%s (%d/%d)%n", entry.getKey(), i + 1, size);
@@ -71,16 +73,24 @@ public class Main {
 					continue;
 				}
 
-				if (trimmed.equals(entry.getValue())) {
-					break;
+				String answer = entry.getValue();
+				if (trimmed.equals(answer)) {
+					System.out.println("Correct!");
+					playSound("sounds/correct.wav");
 				}
-				System.out.println("Wrong. Try again!");
-				playSound("sounds/wrong.wav");
+				else {
+					wrongAnswers.add(entry);
+					System.out.printf("Wrong! The answer was '%s'%n", answer);
+					playSound("sounds/wrong.wav");
+				}
+
+				break;
 			}
-			System.out.println("Correct!");
-			playSound("sounds/correct.wav");
 		}
-		System.out.println("Congratulation!");
+
+		int wrongAnswersSize = wrongAnswers.size();
+		double score = (size - wrongAnswersSize) * 100d / size;
+		System.out.printf("Your score is %.2f (%d / %d)!", score, wrongAnswersSize, size);
 	}
 
 	private static void playSound(String soundPath)
