@@ -91,6 +91,11 @@ public class Main {
 		int wrongAnswersSize = wrongAnswers.size();
 		double score = (size - wrongAnswersSize) * 100d / size;
 		System.out.printf("Your score is %.2f (%d / %d)!", score, wrongAnswersSize, size);
+
+		System.out.println("Wrong answers:");
+		for (Map.Entry<String, String> entry : wrongAnswers) {
+			System.out.printf("\t- %s%n", entry);
+		}
 	}
 
 	private static void playSound(String soundPath)
