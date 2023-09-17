@@ -91,8 +91,8 @@ public class Main {
 		}
 
 		int wrongAnswersSize = wrongAnswers.size();
-		double score = getScore(size, wrongAnswersSize);
-		System.out.printf("Your score is %.2f (%d / %d)!", score, wrongAnswersSize, size);
+		double score = getScore(size, size - wrongAnswersSize);
+		System.out.printf("Your score is %.2f (%d / %d)!%n", score, wrongAnswersSize, size);
 
 		System.out.println("Wrong answers:");
 		for (Map.Entry<String, String> entry : wrongAnswers) {
