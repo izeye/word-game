@@ -63,8 +63,9 @@ public class Main {
 		List<Map.Entry<String, String>> wrongAnswers = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
 			Map.Entry<String, String> entry = entries.get(i);
-			System.out.format("%s (%d/%d) (Max score: %.2f)%n", entry.getKey(), i + 1, size,
-					getScore(size, wrongAnswers.size()));
+			int wrongAnswersSize = wrongAnswers.size();
+			System.out.format("%s (%d/%d) (Max score: %.2f, score: %.2f)%n", entry.getKey(), i + 1, size,
+					getScore(size, size - wrongAnswersSize), getScore(size, i - wrongAnswersSize));
 			String line;
 			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
@@ -99,8 +100,8 @@ public class Main {
 		}
 	}
 
-	private static double getScore(int size, int wrongAnswersSize) {
-		return (size - wrongAnswersSize) * 100d / size;
+	private static double getScore(int size, int correctAnswersSize) {
+		return correctAnswersSize * 100d / size;
 	}
 
 	private static void playSound(String soundPath)
