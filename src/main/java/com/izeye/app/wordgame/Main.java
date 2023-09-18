@@ -90,9 +90,9 @@ public class Main {
 			}
 		}
 
-		int wrongAnswersSize = wrongAnswers.size();
-		double score = getScore(size, size - wrongAnswersSize);
-		System.out.printf("Your score is %.2f (%d / %d)!%n", score, wrongAnswersSize, size);
+		int correctAnswersSize = size - wrongAnswers.size();
+		double score = getScore(size, correctAnswersSize);
+		System.out.printf("Your score is %.2f (%d / %d)!%n", score, correctAnswersSize, size);
 
 		System.out.println("Wrong answers:");
 		for (Map.Entry<String, String> entry : wrongAnswers) {
