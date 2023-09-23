@@ -82,7 +82,7 @@ public class Main {
 				}
 				else {
 					wrongAnswers.add(entry);
-					System.out.printf("Wrong! The answer was '%s'%n", answer);
+					System.out.printf("Wrong! The answer was '%s'.%n", answer);
 					playSound("sounds/wrong.wav");
 				}
 
@@ -94,9 +94,21 @@ public class Main {
 		double score = getScore(size, correctAnswersSize);
 		System.out.printf("Your score is %.2f (%d / %d)!%n", score, correctAnswersSize, size);
 
-		System.out.println("Wrong answers:");
-		for (Map.Entry<String, String> entry : wrongAnswers) {
-			System.out.printf("\t- %s%n", entry);
+		if (score == 100d) {
+			playSound("sounds/perfect.wav");
+		}
+		else if (score >= 80d) {
+			playSound("sounds/pass.wav");
+		}
+		else {
+			playSound("sounds/fail.wav");
+		}
+
+		if (!wrongAnswers.isEmpty()) {
+			System.out.println("Wrong answers:");
+			for (Map.Entry<String, String> entry : wrongAnswers) {
+				System.out.printf("\t- %s%n", entry);
+			}
 		}
 	}
 
