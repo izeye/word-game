@@ -16,6 +16,7 @@
 
 package com.izeye.app.wordgame;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -105,9 +106,18 @@ public class Main {
 		}
 
 		if (!wrongAnswers.isEmpty()) {
-			System.out.println("Wrong answers:");
+			StringBuilder sb = new StringBuilder();
+			sb.append(String.format("Wrong answers:%n"));
+
 			for (Map.Entry<String, String> entry : wrongAnswers) {
-				System.out.printf("\t- %s%n", entry);
+				sb.append(String.format("\t- %s%n", entry));
+			}
+
+			String wrongAnswersReport = sb.toString();
+			System.out.println(wrongAnswersReport);
+
+			try (FileWriter fw = new FileWriter("wrong-answers-report.txt")) {
+				fw.write(wrongAnswersReport);
 			}
 		}
 	}
