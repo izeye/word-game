@@ -1,5 +1,6 @@
 /.gradle/
 /.idea/
 /build/
+/tts/
 /word-game.iml
 /wrong-answers-report.txt

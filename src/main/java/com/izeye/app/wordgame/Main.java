@@ -16,9 +16,12 @@
 
 package com.izeye.app.wordgame;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -36,6 +39,15 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import com.google.cloud.texttospeech.v1.AudioConfig;
+import com.google.cloud.texttospeech.v1.AudioEncoding;
+import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
+import com.google.cloud.texttospeech.v1.SynthesisInput;
+import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
+import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
+import com.google.protobuf.ByteString;
 
 /**
  * Main class.
@@ -77,6 +89,7 @@ public class Main {
 				}
 
 				String answer = entry.getValue();
+				saveTtsAsFile(answer);
 				if (trimmed.equals(answer)) {
 					System.out.println("Correct!");
 					playSound("sounds/correct.wav");
@@ -143,6 +156,38 @@ public class Main {
 		latch.await();
 		clip.close();
 		audioInputStream.close();
+	}
+
+	private static void saveTtsAsFile(String text)
+			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
+		File directory = new File("tts");
+		if (!directory.exists()) {
+			System.out.printf("%nCreating '%s'...%n", directory);
+			directory.mkdirs();
+		}
+
+		File file = new File(directory, text + ".mp3");
+		if (!file.exists()) {
+			System.out.printf("%nCreating '%s'...%n", file);
+			try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
+				SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
+
+				VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
+					.setLanguageCode("en-US")
+					.setSsmlGender(SsmlVoiceGender.NEUTRAL)
+					.build();
+
+				AudioConfig audioConfig = AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
+
+				SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
+
+				ByteString audioContent = response.getAudioContent();
+				try (OutputStream out = new FileOutputStream(file)) {
+					byte[] byteArray = audioContent.toByteArray();
+					out.write(byteArray);
+				}
+			}
+		}
 	}
 
 }
