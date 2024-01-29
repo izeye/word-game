@@ -48,13 +48,17 @@ import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.protobuf.ByteString;
+import javafx.application.Application;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 
 /**
  * Main class.
  *
  * @author Johnny Lim
  */
-public class Main {
+public class Main extends Application {
 
 	public static void main(String[] args)
 			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
@@ -89,7 +93,10 @@ public class Main {
 				}
 
 				String answer = entry.getValue();
-				saveTtsAsFile(answer);
+
+				File ttsFile = saveTtsAsFile(answer);
+				playMp3(ttsFile);
+
 				if (trimmed.equals(answer)) {
 					System.out.println("Correct!");
 					playSound("sounds/correct.wav");
@@ -133,6 +140,18 @@ public class Main {
 				fw.write(wrongAnswersReport);
 			}
 		}
+
+		System.exit(0);
+	}
+
+	private static void playMp3(File mp3File) throws InterruptedException {
+		Media media = new Media(mp3File.toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.play();
+
+		CountDownLatch latch = new CountDownLatch(1);
+		mediaPlayer.setOnEndOfMedia(() -> latch.countDown());
+		latch.await();
 	}
 
 	private static double getScore(int size, int correctAnswersSize) {
@@ -158,7 +177,7 @@ public class Main {
 		audioInputStream.close();
 	}
 
-	private static void saveTtsAsFile(String text)
+	private static File saveTtsAsFile(String text)
 			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
 		File directory = new File("tts");
 		if (!directory.exists()) {
@@ -188,6 +207,11 @@ public class Main {
 				}
 			}
 		}
+		return file;
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 	}
 
 }
