@@ -80,9 +80,11 @@ public class Main extends Application {
 		List<Map.Entry<String, String>> wrongAnswers = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
 			Map.Entry<String, String> entry = entries.get(i);
+			String answer = entry.getValue();
 			int wrongAnswersSize = wrongAnswers.size();
-			System.out.format("%s (%d/%d) (Max score: %.2f, score: %.2f)%n", entry.getKey(), i + 1, size,
-					getScore(size, size - wrongAnswersSize), getScore(size, i - wrongAnswersSize));
+			System.out.format("%s (hint: %c) (%d/%d) (Max score: %.2f, score: %.2f)%n", entry.getKey(),
+					answer.charAt(0), i + 1, size, getScore(size, size - wrongAnswersSize),
+					getScore(size, i - wrongAnswersSize));
 			String line;
 			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
@@ -91,8 +93,6 @@ public class Main extends Application {
 				if (!scanner.nextLine().trim().equals("y")) {
 					continue;
 				}
-
-				String answer = entry.getValue();
 
 				File ttsFile = saveTtsAsFile(answer);
 				playMp3(ttsFile);
@@ -114,7 +114,6 @@ public class Main extends Application {
 		int correctAnswersSize = size - wrongAnswers.size();
 		double score = getScore(size, correctAnswersSize);
 		System.out.printf("Your score is %.2f (%d / %d)!%n", score, correctAnswersSize, size);
-
 		if (score == 100d) {
 			playSound("sounds/perfect.wav");
 		}
