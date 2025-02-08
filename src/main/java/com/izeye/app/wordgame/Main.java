@@ -82,7 +82,7 @@ public class Main extends Application {
 			Map.Entry<String, String> entry = entries.get(i);
 			String answer = entry.getValue();
 			int wrongAnswersSize = wrongAnswers.size();
-			printQuestion(entry, answer, i, size, wrongAnswersSize);
+			printQuestionWithHint(entry, answer, i, size, wrongAnswersSize);
 			String line;
 			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
