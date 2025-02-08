@@ -82,9 +82,7 @@ public class Main extends Application {
 			Map.Entry<String, String> entry = entries.get(i);
 			String answer = entry.getValue();
 			int wrongAnswersSize = wrongAnswers.size();
-			System.out.format("%s (hint: %c) (%d/%d) (Max score: %.2f, score: %.2f)%n", entry.getKey(),
-					answer.charAt(0), i + 1, size, getScore(size, size - wrongAnswersSize),
-					getScore(size, i - wrongAnswersSize));
+			printQuestion(entry, answer, i, size, wrongAnswersSize);
 			String line;
 			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
@@ -141,6 +139,18 @@ public class Main extends Application {
 		}
 
 		System.exit(0);
+	}
+
+	private static void printQuestionWithHint(Map.Entry<String, String> entry, String answer, int i, int size,
+			int wrongAnswersSize) {
+		System.out.format("%s (hint: %c) (%d/%d) (Max score: %.2f, score: %.2f)%n", entry.getKey(), answer.charAt(0),
+				i + 1, size, getScore(size, size - wrongAnswersSize), getScore(size, i - wrongAnswersSize));
+	}
+
+	private static void printQuestion(Map.Entry<String, String> entry, String answer, int i, int size,
+			int wrongAnswersSize) {
+		System.out.format("%s (%d/%d) (Max score: %.2f, score: %.2f)%n", entry.getKey(), i + 1, size,
+				getScore(size, size - wrongAnswersSize), getScore(size, i - wrongAnswersSize));
 	}
 
 	private static void playMp3(File mp3File) throws InterruptedException {
