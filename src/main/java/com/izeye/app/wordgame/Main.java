@@ -60,18 +60,28 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
+	private static final String DELIMITER_DEFAULT = ",";
+
+	private static final String DELIMITER_VERTICAL_BAR = "\\|";
+
 	public static void main(String[] args)
 			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
 		Scanner scanner = new Scanner(System.in);
 
 		String path = "src/main/resources/words/english_to_korean.csv";
-		if (args.length == 1) {
+		String delimiter = DELIMITER_DEFAULT;
+		if (args.length >= 1) {
 			path = args[0];
+
+			if (args.length == 2 && args[1].equals("vertical-bar")) {
+				delimiter = DELIMITER_VERTICAL_BAR;
+			}
 		}
 
+		String finalDelimiter = delimiter;
 		Map<String, String> koreanToEnglish = Files.readAllLines(Path.of(path))
 			.stream()
-			.map((line) -> line.split(",", 2))
+			.map((line) -> line.split(finalDelimiter, 2))
 			.collect(Collectors.toMap((fields) -> fields[1], (fields) -> fields[0]));
 
 		List<Map.Entry<String, String>> entries = koreanToEnglish.entrySet().stream().collect(Collectors.toList());
