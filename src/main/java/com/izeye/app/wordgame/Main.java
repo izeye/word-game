@@ -86,7 +86,7 @@ public class Main extends Application {
 		List<Map.Entry<String, String>> entries = Files.readAllLines(Path.of(path))
 			.stream()
 			.map((line) -> line.split(finalDelimiter, 2))
-			.map((fields) -> Map.entry(fields[0], fields[1]))
+			.map((fields) -> Map.entry(fields[1], fields[0]))
 			.toList();
 
 		if (shuffle) {
