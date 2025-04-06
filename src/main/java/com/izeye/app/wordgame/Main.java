@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -87,7 +88,7 @@ public class Main extends Application {
 			.stream()
 			.map((line) -> line.split(finalDelimiter, 2))
 			.map((fields) -> Map.entry(fields[1], fields[0]))
-			.toList();
+			.collect(Collectors.toCollection(ArrayList::new));
 
 		if (shuffle) {
 			Collections.shuffle(entries);
