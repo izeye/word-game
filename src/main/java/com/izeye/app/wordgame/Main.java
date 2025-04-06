@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -70,22 +69,30 @@ public class Main extends Application {
 
 		String path = "src/main/resources/words/english_to_korean.csv";
 		String delimiter = DELIMITER_DEFAULT;
+		boolean shuffle = true;
 		if (args.length >= 1) {
 			path = args[0];
 
-			if (args.length == 2 && args[1].equals("vertical-bar")) {
+			if (args.length >= 2 && args[1].equals("vertical-bar")) {
 				delimiter = DELIMITER_VERTICAL_BAR;
+
+				if (args.length == 3 && args[2].equals("disable-shuffle")) {
+					shuffle = false;
+				}
 			}
 		}
 
 		String finalDelimiter = delimiter;
-		Map<String, String> koreanToEnglish = Files.readAllLines(Path.of(path))
+		List<Map.Entry<String, String>> entries = Files.readAllLines(Path.of(path))
 			.stream()
 			.map((line) -> line.split(finalDelimiter, 2))
-			.collect(Collectors.toMap((fields) -> fields[1], (fields) -> fields[0]));
+			.map((fields) -> Map.entry(fields[0], fields[1]))
+			.toList();
 
-		List<Map.Entry<String, String>> entries = koreanToEnglish.entrySet().stream().collect(Collectors.toList());
-		Collections.shuffle(entries);
+		if (shuffle) {
+			Collections.shuffle(entries);
+		}
+
 		int size = entries.size();
 		List<Map.Entry<String, String>> wrongAnswers = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
