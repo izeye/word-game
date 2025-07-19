@@ -71,6 +71,7 @@ public class Main extends Application {
 		String path = "src/main/resources/words/english_to_korean.csv";
 		String delimiter = DELIMITER_DEFAULT;
 		boolean shuffle = true;
+		boolean pronunciationHint = false;
 		if (args.length >= 1) {
 			path = args[0];
 
@@ -79,6 +80,12 @@ public class Main extends Application {
 
 				if (args.length == 3 && args[2].equals("disable-shuffle")) {
 					shuffle = false;
+				}
+			}
+
+			for (int i = 1; i < args.length; i++) {
+				if (args[i].equals("pronunciation-hint")) {
+					pronunciationHint = true;
 				}
 			}
 		}
@@ -101,6 +108,12 @@ public class Main extends Application {
 			String answer = entry.getValue();
 			int wrongAnswersSize = wrongAnswers.size();
 			printQuestionWithHint(entry, answer, i, size, wrongAnswersSize);
+
+			File ttsFile = saveTtsAsFile(answer);
+			if (pronunciationHint) {
+				playMp3(ttsFile);
+			}
+
 			String line;
 			while ((line = scanner.nextLine()) != null) {
 				String trimmed = line.trim();
@@ -110,7 +123,6 @@ public class Main extends Application {
 					continue;
 				}
 
-				File ttsFile = saveTtsAsFile(answer);
 				playMp3(ttsFile);
 
 				if (trimmed.equals(answer)) {
