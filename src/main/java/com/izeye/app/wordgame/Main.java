@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -98,14 +99,19 @@ public class Main extends Application {
 			paths.add(SAMPLE_PATH);
 		}
 
+		Map<String, Double> summary = new LinkedHashMap<>();
 		for (String path : paths) {
-			runTest(path, delimiter, shuffle, pronunciationHint);
+			double score = runTest(path, delimiter, shuffle, pronunciationHint);
+			summary.put(path, score);
 		}
+
+		System.out.println("# Summary");
+		summary.entrySet().forEach(System.out::println);
 
 		System.exit(0);
 	}
 
-	private static void runTest(String path, String delimiter, boolean shuffle, boolean pronunciationHint)
+	private static double runTest(String path, String delimiter, boolean shuffle, boolean pronunciationHint)
 			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
 		System.out.printf("Start testing with %s.%n", path);
 
@@ -187,6 +193,8 @@ public class Main extends Application {
 				fw.write(wrongAnswersReport);
 			}
 		}
+
+		return score;
 	}
 
 	private static void printQuestionWithHint(Map.Entry<String, String> entry, String answer, int i, int size,
