@@ -75,16 +75,16 @@ public class Main extends Application {
 		if (args.length >= 1) {
 			path = args[0];
 
-			if (args.length >= 2 && args[1].equals("vertical-bar")) {
+			if (args.length >= 2 && args[1].equals("--vertical-bar")) {
 				delimiter = DELIMITER_VERTICAL_BAR;
 
-				if (args.length == 3 && args[2].equals("disable-shuffle")) {
+				if (args.length == 3 && args[2].equals("--disable-shuffle")) {
 					shuffle = false;
 				}
 			}
 
 			for (int i = 1; i < args.length; i++) {
-				if (args[i].equals("pronunciation-hint")) {
+				if (args[i].equals("--pronunciation-hint")) {
 					pronunciationHint = true;
 				}
 			}
