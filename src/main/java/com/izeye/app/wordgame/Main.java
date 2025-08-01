@@ -60,40 +60,60 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
+	private static final String SAMPLE_PATH = "src/main/resources/words/english_to_korean.csv";
+
 	private static final String DELIMITER_DEFAULT = ",";
 
 	private static final String DELIMITER_VERTICAL_BAR = "\\|";
 
 	public static void main(String[] args)
 			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
-		Scanner scanner = new Scanner(System.in);
-
-		String path = "src/main/resources/words/english_to_korean.csv";
 		String delimiter = DELIMITER_DEFAULT;
 		boolean shuffle = true;
 		boolean pronunciationHint = false;
-		if (args.length >= 1) {
-			path = args[0];
 
-			if (args.length >= 2 && args[1].equals("--vertical-bar")) {
-				delimiter = DELIMITER_VERTICAL_BAR;
+		List<String> paths = new ArrayList<>();
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			switch (arg) {
+				case "--vertical-bar":
+					delimiter = DELIMITER_VERTICAL_BAR;
+					break;
 
-				if (args.length == 3 && args[2].equals("--disable-shuffle")) {
+				case "--disable-shuffle":
 					shuffle = false;
-				}
-			}
+					break;
 
-			for (int i = 1; i < args.length; i++) {
-				if (args[i].equals("--pronunciation-hint")) {
+				case "--pronunciation-hint":
 					pronunciationHint = true;
-				}
+					break;
+
+				default:
+					paths.add(arg);
+					break;
 			}
 		}
 
-		String finalDelimiter = delimiter;
+		if (paths.isEmpty()) {
+			paths.add(SAMPLE_PATH);
+		}
+
+		for (String path : paths) {
+			runTest(path, delimiter, shuffle, pronunciationHint);
+		}
+
+		System.exit(0);
+	}
+
+	private static void runTest(String path, String delimiter, boolean shuffle, boolean pronunciationHint)
+			throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
+		System.out.printf("Start testing with %s.%n", path);
+
+		Scanner scanner = new Scanner(System.in);
+
 		List<Map.Entry<String, String>> entries = Files.readAllLines(Path.of(path))
 			.stream()
-			.map((line) -> line.split(finalDelimiter, 2))
+			.map((line) -> line.split(delimiter, 2))
 			.map((fields) -> Map.entry(fields[1], fields[0]))
 			.collect(Collectors.toCollection(ArrayList::new));
 
@@ -167,8 +187,6 @@ public class Main extends Application {
 				fw.write(wrongAnswersReport);
 			}
 		}
-
-		System.exit(0);
 	}
 
 	private static void printQuestionWithHint(Map.Entry<String, String> entry, String answer, int i, int size,
