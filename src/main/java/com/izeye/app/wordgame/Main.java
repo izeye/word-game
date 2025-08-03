@@ -99,6 +99,10 @@ public class Main extends Application {
 			paths.add(SAMPLE_PATH);
 		}
 
+		System.out.println("# Paths");
+		paths.forEach(System.out::println);
+
+		System.out.println("# Tests");
 		Map<String, Double> summary = new LinkedHashMap<>();
 		for (String path : paths) {
 			double score = runTest(path, delimiter, shuffle, pronunciationHint);
