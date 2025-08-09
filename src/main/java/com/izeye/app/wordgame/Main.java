@@ -90,7 +90,9 @@ public class Main extends Application {
 					break;
 
 				default:
-					paths.add(arg);
+					if (!arg.startsWith("#")) {
+						paths.add(arg);
+					}
 					break;
 			}
 		}
