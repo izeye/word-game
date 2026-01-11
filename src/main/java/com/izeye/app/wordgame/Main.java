@@ -258,7 +258,7 @@ public class Main extends Application {
 
 		File file = new File(directory, text + ".mp3");
 		if (!file.exists()) {
-			System.out.printf("%nCreating '%s'...%n", file);
+			// System.out.printf("%nCreating '%s'...%n", file);
 			try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
 				SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
 
