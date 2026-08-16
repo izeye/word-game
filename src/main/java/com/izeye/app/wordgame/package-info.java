@@ -15,6 +15,6 @@
  */
 
 /**
- * Package for word game app.
+ * Package for the word game app.
  */
 package com.izeye.app.wordgame;

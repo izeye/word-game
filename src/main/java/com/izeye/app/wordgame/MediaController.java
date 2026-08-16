@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.izeye.app.wordgame.web;
+package com.izeye.app.wordgame;
 
 import java.util.Set;
 

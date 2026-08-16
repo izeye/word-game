@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.izeye.app.wordgame.web;
-
-import java.util.List;
+package com.izeye.app.wordgame;
 
 /**
- * The words of a single file, as played in one round.
+ * A word file available to be played.
  *
- * @param id opaque identifier of the file
- * @param name file name as shown while playing
- * @param entries words to be tested, in file order
+ * @param id opaque identifier used to request the file's words
+ * @param name file name as shown in the picker
+ * @param wordCount number of usable words in the file
  * @author Johnny Lim
  */
-public record WordFileContent(String id, String name, List<WordEntry> entries) {
+public record WordFile(String id, String name, int wordCount) {
 
 }

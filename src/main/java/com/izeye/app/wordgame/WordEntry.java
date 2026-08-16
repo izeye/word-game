@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.izeye.app.wordgame.web;
-
-import java.util.List;
+package com.izeye.app.wordgame;
 
 /**
- * A group of word files sharing a directory.
+ * A single word to be tested.
  *
- * @param id opaque identifier, unique across libraries
- * @param library name of the library the book was found in
- * @param name directory name as shown in the picker
- * @param files word files belonging to the book, in natural order
+ * @param question text shown to the player, taken from the second field
+ * @param answer expected response, taken from the first field
  * @author Johnny Lim
  */
-public record Book(String id, String library, String name, List<WordFile> files) {
+public record WordEntry(String question, String answer) {
 
 }

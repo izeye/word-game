@@ -32,7 +32,7 @@ dependencies {
 }
 
 springBoot {
-    mainClass = 'com.izeye.app.wordgame.web.WordGameWebApplication'
+    mainClass = 'com.izeye.app.wordgame.WordGameApplication'
 }
 
 test {

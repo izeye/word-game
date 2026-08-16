@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.izeye.app.wordgame.web;
+package com.izeye.app.wordgame;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import java.util.List;
 
 /**
- * Entry point for the web version of the word game.
+ * A group of word files sharing a directory.
  *
+ * @param id opaque identifier, unique across libraries
+ * @param library name of the library the book was found in
+ * @param name directory name as shown in the picker
+ * @param files word files belonging to the book, in natural order
  * @author Johnny Lim
  */
-@SpringBootApplication
-@EnableConfigurationProperties(WordGameProperties.class)
-public class WordGameWebApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(WordGameWebApplication.class, args);
-	}
+public record Book(String id, String library, String name, List<WordFile> files) {
 
 }

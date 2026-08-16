@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package com.izeye.app.wordgame.web;
+package com.izeye.app.wordgame;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
- * A word file available to be played.
+ * Entry point for the word game.
  *
- * @param id opaque identifier used to request the file's words
- * @param name file name as shown in the picker
- * @param wordCount number of usable words in the file
  * @author Johnny Lim
  */
-public record WordFile(String id, String name, int wordCount) {
+@SpringBootApplication
+@EnableConfigurationProperties(WordGameProperties.class)
+public class WordGameApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(WordGameApplication.class, args);
+	}
 
 }
