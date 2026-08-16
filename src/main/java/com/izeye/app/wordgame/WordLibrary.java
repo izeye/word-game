@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Component;
 
@@ -45,7 +45,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class WordLibrary {
 
-	private static final Log logger = LogFactory.getLog(WordLibrary.class);
+	private static final Logger logger = LoggerFactory.getLogger(WordLibrary.class);
 
 	private static final String VERTICAL_BAR_EXTENSION = ".vsv";
 
@@ -76,7 +76,7 @@ public class WordLibrary {
 		for (WordGameProperties.Library library : this.properties.getLibraries()) {
 			Path root = Path.of(library.getPath()).toAbsolutePath().normalize();
 			if (!Files.isDirectory(root)) {
-				logger.warn("Skipping library '%s': '%s' is not a directory".formatted(library.getName(), root));
+				logger.warn("Skipping library '{}': '{}' is not a directory", library.getName(), root);
 				continue;
 			}
 			books.addAll(scan(library.getName(), root, newIndex));
@@ -111,7 +111,7 @@ public class WordLibrary {
 				.forEach((path) -> byDirectory.computeIfAbsent(path.getParent(), (key) -> new ArrayList<>()).add(path));
 		}
 		catch (IOException ex) {
-			logger.warn("Failed to scan library '%s' at '%s'".formatted(libraryName, root), ex);
+			logger.warn("Failed to scan library '{}' at '{}'", libraryName, root, ex);
 			return List.of();
 		}
 
