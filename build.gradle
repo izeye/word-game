@@ -9,6 +9,8 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.5.16'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 apply plugin: 'io.spring.javaformat'
@@ -23,11 +25,15 @@ repositories {
 
 dependencies {
     implementation 'com.google.cloud:google-cloud-texttospeech:2.56.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.39")
+}
+
+springBoot {
+    mainClass = 'com.izeye.app.wordgame.web.WordGameWebApplication'
 }
 
 test {

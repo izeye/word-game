@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Word Game</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+	<header class="header">
+		<h1>Word Game</h1>
+		<p class="tagline">Type the English word for each prompt.</p>
+	</header>
+
+	<!-- Setup -->
+	<section id="setup" class="card">
+		<div class="field">
+			<label for="book">Book</label>
+			<select id="book"></select>
+		</div>
+
+		<div class="field">
+			<div class="field-head">
+				<label for="range">Files</label>
+				<span class="hint-text">Pick below, or type a range like <code>40-42</code></span>
+			</div>
+			<div class="range-row">
+				<input id="range" type="text" placeholder="40-42, 45" autocomplete="off">
+				<button id="apply-range" type="button" class="ghost">Select</button>
+				<button id="select-all" type="button" class="ghost">All</button>
+				<button id="clear-all" type="button" class="ghost">None</button>
+			</div>
+			<div id="files" class="files"></div>
+		</div>
+
+		<div class="field">
+			<label class="check"><input type="checkbox" id="opt-shuffle" checked> Shuffle words</label>
+			<label class="check"><input type="checkbox" id="opt-hint" checked> Show first-letter hint</label>
+			<label class="check"><input type="checkbox" id="opt-pronounce"> Play pronunciation before answering</label>
+		</div>
+
+		<div class="actions">
+			<button id="start" type="button" class="primary" disabled>Start</button>
+			<span id="selection-summary" class="hint-text"></span>
+		</div>
+	</section>
+
+	<!-- Game -->
+	<section id="game" class="card" hidden>
+		<div class="game-head">
+			<span id="game-file" class="pill"></span>
+			<span id="game-progress" class="hint-text"></span>
+		</div>
+		<div class="bar"><div id="game-bar" class="bar-fill"></div></div>
+
+		<p id="question" class="question"></p>
+		<p id="hint" class="hint"></p>
+
+		<form id="answer-form" autocomplete="off">
+			<input id="answer" type="text" placeholder="Your answer" autocomplete="off"
+				   autocapitalize="off" autocorrect="off" spellcheck="false">
+			<button type="submit" class="primary">Submit</button>
+		</form>
+
+		<div id="feedback" class="feedback" hidden></div>
+
+		<div class="scores">
+			<span>Max <strong id="max-score">100.00</strong></span>
+			<span>Now <strong id="cur-score">0.00</strong></span>
+			<button id="quit" type="button" class="ghost">Quit</button>
+		</div>
+	</section>
+
+	<!-- Results -->
+	<section id="results" class="card" hidden>
+		<h2>Summary</h2>
+		<div id="summary"></div>
+		<div id="wrong-answers"></div>
+		<div class="actions">
+			<button id="again" type="button" class="primary">Play again</button>
+			<button id="retry-wrong" type="button" class="ghost" hidden>Retry wrong answers</button>
+		</div>
+	</section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

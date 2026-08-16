@@ -1,0 +1,362 @@
+:root {
+	color-scheme: light dark;
+	--bg: #f5f6f8;
+	--card: #ffffff;
+	--text: #1a1c1f;
+	--muted: #6b7280;
+	--border: #e2e5ea;
+	--accent: #2f6feb;
+	--accent-text: #ffffff;
+	--ok: #17803d;
+	--ok-bg: #e8f6ed;
+	--bad: #b42318;
+	--bad-bg: #fdeceb;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #14161a;
+		--card: #1d2025;
+		--text: #e8eaed;
+		--muted: #9aa1ac;
+		--border: #2c3037;
+		--accent: #5b8dff;
+		--accent-text: #0d1117;
+		--ok: #5bd08a;
+		--ok-bg: #17301f;
+		--bad: #ff8b80;
+		--bad-bg: #351c1a;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 2rem 1rem 4rem;
+	background: var(--bg);
+	color: var(--text);
+	font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+		"Noto Sans KR", sans-serif;
+}
+
+.app {
+	max-width: 44rem;
+	margin: 0 auto;
+}
+
+.header h1 {
+	margin: 0;
+	font-size: 1.5rem;
+	letter-spacing: -0.01em;
+}
+
+.tagline {
+	margin: 0.25rem 0 1.5rem;
+	color: var(--muted);
+}
+
+.card {
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 1.5rem;
+}
+
+.field {
+	margin-bottom: 1.5rem;
+}
+
+.field:last-of-type {
+	margin-bottom: 0;
+}
+
+.field-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.hint-text {
+	color: var(--muted);
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+code {
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 0 0.25rem;
+}
+
+select,
+input[type="text"] {
+	width: 100%;
+	padding: 0.6rem 0.7rem;
+	font: inherit;
+	color: var(--text);
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+}
+
+select:focus,
+input[type="text"]:focus {
+	outline: 2px solid var(--accent);
+	outline-offset: 1px;
+}
+
+.range-row {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.range-row input {
+	flex: 1;
+}
+
+button {
+	font: inherit;
+	padding: 0.6rem 1rem;
+	border-radius: 8px;
+	border: 1px solid var(--border);
+	background: var(--card);
+	color: var(--text);
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+button:hover:not(:disabled) {
+	border-color: var(--accent);
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+button.primary {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: var(--accent-text);
+	font-weight: 600;
+}
+
+.files {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+	gap: 0.4rem;
+	max-height: 16rem;
+	overflow-y: auto;
+	padding: 0.5rem;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+}
+
+.files:empty::after {
+	content: "No files in this book.";
+	color: var(--muted);
+	font-size: 0.875rem;
+}
+
+.file {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.3rem 0.4rem;
+	border-radius: 6px;
+	font-size: 0.9rem;
+	cursor: pointer;
+	min-width: 0;
+}
+
+.file:hover {
+	background: var(--bg);
+}
+
+.file span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.file .count {
+	color: var(--muted);
+	font-size: 0.8rem;
+	margin-left: auto;
+	padding-left: 0.3rem;
+}
+
+.check {
+	font-weight: 400;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.4rem;
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+	flex-wrap: wrap;
+}
+
+/* Game */
+.game-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.pill {
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	padding: 0.2rem 0.7rem;
+	font-size: 0.8rem;
+	color: var(--muted);
+}
+
+.bar {
+	height: 4px;
+	background: var(--border);
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.bar-fill {
+	height: 100%;
+	width: 0;
+	background: var(--accent);
+	transition: width 0.2s ease;
+}
+
+.question {
+	font-size: 1.75rem;
+	font-weight: 600;
+	margin: 1.5rem 0 0.25rem;
+	line-height: 1.3;
+	word-break: keep-all;
+}
+
+.hint {
+	margin: 0 0 1.25rem;
+	color: var(--muted);
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+#answer-form {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.feedback {
+	margin-top: 1rem;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	font-weight: 600;
+}
+
+.feedback.ok {
+	background: var(--ok-bg);
+	color: var(--ok);
+}
+
+.feedback.bad {
+	background: var(--bad-bg);
+	color: var(--bad);
+}
+
+.feedback .again {
+	display: block;
+	font-weight: 400;
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+	opacity: 0.85;
+}
+
+.scores {
+	display: flex;
+	gap: 1.25rem;
+	align-items: center;
+	margin-top: 1.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--border);
+	color: var(--muted);
+	font-size: 0.875rem;
+}
+
+.scores strong {
+	color: var(--text);
+	font-variant-numeric: tabular-nums;
+}
+
+.scores button {
+	margin-left: auto;
+}
+
+/* Results */
+#results h2 {
+	margin: 0 0 1rem;
+	font-size: 1.25rem;
+}
+
+.result-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.6rem 0;
+	border-bottom: 1px solid var(--border);
+}
+
+.result-row .score {
+	font-variant-numeric: tabular-nums;
+	font-weight: 600;
+}
+
+.result-row.perfect .score {
+	color: var(--ok);
+}
+
+.result-row.failed .score {
+	color: var(--bad);
+}
+
+.wrong-list {
+	margin-top: 1.5rem;
+}
+
+.wrong-list h3 {
+	font-size: 1rem;
+	margin: 0 0 0.5rem;
+}
+
+.wrong-list ul {
+	margin: 0;
+	padding-left: 1.1rem;
+	color: var(--muted);
+}
+
+.wrong-list li {
+	padding: 0.15rem 0;
+}
+
+.wrong-list strong {
+	color: var(--text);
+}
