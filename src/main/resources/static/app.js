@@ -23,7 +23,17 @@ const results = el('results');
 
 /* ---------- Audio ---------- */
 
-const audioKind = new Map();
+// Voices load asynchronously, and getVoices() is empty until they do.
+let voice = null;
+
+function pickVoice() {
+	if (voice || !('speechSynthesis' in window)) {
+		return voice;
+	}
+	const voices = window.speechSynthesis.getVoices();
+	voice = voices.find((v) => v.lang === 'en-US') || voices.find((v) => v.lang.startsWith('en')) || null;
+	return voice;
+}
 
 function playUrl(url) {
 	return new Promise((resolve) => {
@@ -34,26 +44,19 @@ function playUrl(url) {
 	});
 }
 
-function englishVoice() {
-	if (!('speechSynthesis' in window)) {
-		return null;
-	}
-	const voices = window.speechSynthesis.getVoices();
-	return voices.find((v) => v.lang === 'en-US') || voices.find((v) => v.lang.startsWith('en')) || null;
-}
-
-function speakBrowser(text) {
+// Pronunciation is always browser speech synthesis.
+function playWord(word) {
 	return new Promise((resolve) => {
 		if (!('speechSynthesis' in window)) {
 			resolve();
 			return;
 		}
 		window.speechSynthesis.cancel();
-		const utterance = new SpeechSynthesisUtterance(text);
+		const utterance = new SpeechSynthesisUtterance(word);
 		utterance.lang = 'en-US';
-		const voice = englishVoice();
-		if (voice) {
-			utterance.voice = voice;
+		const selected = pickVoice();
+		if (selected) {
+			utterance.voice = selected;
 		}
 		utterance.onend = resolve;
 		utterance.onerror = resolve;
@@ -61,23 +64,7 @@ function speakBrowser(text) {
 	});
 }
 
-// Prefer a pre-generated MP3; fall back to browser speech when there is none.
-async function playWord(word) {
-	const url = `/api/audio?word=${encodeURIComponent(word)}`;
-	let kind = audioKind.get(word);
-	if (!kind) {
-		try {
-			const response = await fetch(url, { method: 'HEAD' });
-			kind = response.ok ? 'file' : 'speech';
-		}
-		catch (ignored) {
-			kind = 'speech';
-		}
-		audioKind.set(word, kind);
-	}
-	return kind === 'file' ? playUrl(url) : speakBrowser(word);
-}
-
+// The win/lose cues are sound effects, not speech, so they stay as audio files.
 function playSound(name) {
 	return playUrl(`/api/sound/${name}`);
 }
@@ -455,7 +442,11 @@ el('again').addEventListener('click', () => show(setup));
 el('retry-wrong').addEventListener('click', retryWrong);
 
 if ('speechSynthesis' in window) {
-	window.speechSynthesis.getVoices();
+	pickVoice();
+	window.speechSynthesis.addEventListener('voiceschanged', () => {
+		voice = null;
+		pickVoice();
+	});
 }
 
 loadBooks();

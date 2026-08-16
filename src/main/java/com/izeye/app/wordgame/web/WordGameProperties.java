@@ -35,26 +35,12 @@ public class WordGameProperties {
 	 */
 	private List<Library> libraries = new ArrayList<>();
 
-	/**
-	 * Directory holding pre-generated pronunciation MP3 files, resolved against the
-	 * working directory. Words without a file here fall back to browser speech.
-	 */
-	private String ttsDirectory = "tts";
-
 	public List<Library> getLibraries() {
 		return this.libraries;
 	}
 
 	public void setLibraries(List<Library> libraries) {
 		this.libraries = libraries;
-	}
-
-	public String getTtsDirectory() {
-		return this.ttsDirectory;
-	}
-
-	public void setTtsDirectory(String ttsDirectory) {
-		this.ttsDirectory = ttsDirectory;
 	}
 
 	/**
