@@ -394,7 +394,9 @@ async function submitAnswer(event) {
 		feedback.textContent = 'Correct!';
 	}
 	else {
-		round.wrong.push(entry);
+		// The answer given is kept with the entry so the summary can diff it too.
+		// Spreading keeps question and answer in place, which is all a retry needs.
+		round.wrong.push({ ...entry, given });
 		feedback.className = 'feedback bad';
 		const again = document.createElement('span');
 		again.className = 'again';
@@ -471,9 +473,10 @@ function renderResults() {
 		const ul = document.createElement('ul');
 		for (const entry of allWrong) {
 			const li = document.createElement('li');
-			const strong = document.createElement('strong');
-			strong.textContent = entry.answer;
-			li.append(strong, ` — ${entry.question}`);
+			const prompt = document.createElement('div');
+			prompt.className = 'prompt';
+			prompt.textContent = entry.question;
+			li.append(prompt, renderDiff(entry.given, entry.answer));
 			ul.appendChild(li);
 		}
 		list.appendChild(ul);

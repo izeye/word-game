@@ -404,9 +404,14 @@ button.primary {
 }
 
 .wrong-list li {
-	padding: 0.15rem 0;
+	padding: 0.4rem 0;
 }
 
-.wrong-list strong {
+.wrong-list .prompt {
 	color: var(--text);
+	word-break: keep-all;
+}
+
+.wrong-list .diff {
+	margin: 0.15rem 0 0;
 }
