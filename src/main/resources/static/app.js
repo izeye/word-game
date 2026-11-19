@@ -187,6 +187,103 @@ function applyRange() {
 	renderFiles();
 }
 
+/* ---------- Diff ---------- */
+
+// Character-level diff over an LCS table. An answer is a few dozen characters at
+// most, so the O(n*m) table costs nothing, and it keeps the page free of a
+// vendored diff library: there is no build step or dependency management here.
+// Spreading into an array splits by code point, so a surrogate pair stays whole.
+function diffChars(from, to) {
+	const a = [...from];
+	const b = [...to];
+
+	// lcs[i][j] is the length of the longest common subsequence of a.slice(i) and
+	// b.slice(j), so walking it forward from 0,0 yields the diff left to right.
+	const lcs = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+	for (let i = a.length - 1; i >= 0; i--) {
+		for (let j = b.length - 1; j >= 0; j--) {
+			lcs[i][j] = a[i] === b[j]
+				? lcs[i + 1][j + 1] + 1
+				: Math.max(lcs[i + 1][j], lcs[i][j + 1]);
+		}
+	}
+
+	const parts = [];
+	const add = (type, text) => {
+		const last = parts[parts.length - 1];
+		if (last && last.type === type) {
+			last.text += text;
+		}
+		else {
+			parts.push({ type, text });
+		}
+	};
+
+	let i = 0;
+	let j = 0;
+	while (i < a.length && j < b.length) {
+		if (a[i] === b[j]) {
+			add('same', a[i]);
+			i++;
+			j++;
+		}
+		else if (lcs[i + 1][j] >= lcs[i][j + 1]) {
+			add('del', a[i]);
+			i++;
+		}
+		else {
+			add('ins', b[j]);
+			j++;
+		}
+	}
+	while (i < a.length) {
+		add('del', a[i]);
+		i++;
+	}
+	while (j < b.length) {
+		add('ins', b[j]);
+		j++;
+	}
+	return parts;
+}
+
+// One side of the diff: the sign, then the text with this side's runs marked.
+// The other side's runs belong to the other row, so they are left out here.
+function diffRow(sign, kind, parts) {
+	const row = document.createElement('div');
+	row.className = `diff-row ${kind}`;
+
+	const signNode = document.createElement('span');
+	signNode.className = 'sign';
+	signNode.textContent = sign;
+
+	const text = document.createElement('span');
+	text.className = 'text';
+	for (const part of parts) {
+		if (part.type === 'same') {
+			text.append(part.text);
+		}
+		else if (part.type === kind) {
+			const mark = document.createElement('mark');
+			mark.textContent = part.text;
+			text.appendChild(mark);
+		}
+	}
+
+	row.append(signNode, text);
+	return row;
+}
+
+// A wrong answer is shown as a diff against the right one, so the characters
+// actually missed stand out instead of having to compare two words by eye.
+function renderDiff(given, answer) {
+	const parts = diffChars(given, answer);
+	const diff = document.createElement('div');
+	diff.className = 'diff';
+	diff.append(diffRow('-', 'del', parts), diffRow('+', 'ins', parts));
+	return diff;
+}
+
 /* ---------- Game ---------- */
 
 function shuffle(items) {
@@ -299,9 +396,10 @@ async function submitAnswer(event) {
 	else {
 		round.wrong.push(entry);
 		feedback.className = 'feedback bad';
-		feedback.innerHTML = `Wrong! The answer was <strong></strong>` +
-			`<span class="again">Press Enter to continue.</span>`;
-		feedback.querySelector('strong').textContent = entry.answer;
+		const again = document.createElement('span');
+		again.className = 'again';
+		again.textContent = 'Press Enter to continue.';
+		feedback.replaceChildren('Wrong!', renderDiff(given, entry.answer), again);
 	}
 	feedback.hidden = false;
 	state.awaitingNext = true;

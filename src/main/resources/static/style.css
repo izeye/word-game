@@ -11,6 +11,8 @@
 	--ok-bg: #e8f6ed;
 	--bad: #b42318;
 	--bad-bg: #fdeceb;
+	--ins-mark: #b7e6c8;
+	--del-mark: #ffc9c4;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,6 +28,8 @@
 		--ok-bg: #17301f;
 		--bad: #ff8b80;
 		--bad-bg: #351c1a;
+		--ins-mark: #1f5134;
+		--del-mark: #6b2b26;
 	}
 }
 
@@ -289,6 +293,52 @@ button.primary {
 	font-size: 0.875rem;
 	margin-top: 0.25rem;
 	opacity: 0.85;
+}
+
+.diff {
+	margin: 0.5rem 0 0.25rem;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-weight: 400;
+}
+
+.diff-row {
+	display: flex;
+	gap: 0.5rem;
+	/* Answers can hold spaces, and a long one has to wrap rather than overflow. */
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.diff-row .sign {
+	flex: none;
+	opacity: 0.7;
+	user-select: none;
+}
+
+.diff-row.del {
+	color: var(--bad);
+}
+
+.diff-row.ins {
+	color: var(--ok);
+}
+
+/* mark defaults to a yellow background and black text, so set both. The line
+   through and the underline carry the difference where colour does not. */
+.diff-row mark {
+	color: inherit;
+	border-radius: 3px;
+	padding: 0 1px;
+}
+
+.diff-row.del mark {
+	background: var(--del-mark);
+	text-decoration: line-through;
+}
+
+.diff-row.ins mark {
+	background: var(--ins-mark);
+	text-decoration: underline;
 }
 
 .scores {
